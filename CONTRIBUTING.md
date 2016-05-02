@@ -15,6 +15,11 @@ $ python -m unittest
 Try to to follow the [Earl Grey contribution
 guidelines][earlgrey-contrib] regarding highlighting and editor support.
 
+## Contribution Licensing
+
+By contributing to this project, you agree to release your contributions
+under the same license terms as this project.
+
 
 [earlgrey-contrib]: https://breuleux.github.io/earl-grey/contrib.html
 [neovim]: https://neovim.io/

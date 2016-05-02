@@ -18,6 +18,9 @@ See [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Contributing
 
+By contributing to this project, you agree to release your contributions
+under the same license terms as this project.
+
 See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 
