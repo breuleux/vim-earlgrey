@@ -112,7 +112,7 @@ syntax keyword egConstant null undefined
 syntax keyword egBuiltin arguments Infinity JSON Math NaN Reflect
 " functions
 syntax keyword egBuiltin decodeURI decodeURIComponent encodeURI encodeURIComponent escape eval
-syntax keyword egBuiltin isFinite isNaN parseFloat parseInt unescape uneval
+syntax keyword egBuiltin isFinite isNaN parseFloat parseInt unescape
 " base objects
 syntax keyword egType Boolean Date Function Generator GeneratorFunction Map Number Object
 syntax keyword egType Promise Proxy RegExp Set String Symbol WeakMap WeakSet
@@ -122,7 +122,7 @@ syntax keyword egType Uint8Array Uint8ClampedArray Uint16Array Uint32Array
 " buffers
 syntax keyword egType ArrayBuffer DataView
 " error objects
-syntax keyword egType Error EvalError InternalError RangeError ReferenceError
+syntax keyword egType Error EvalError RangeError ReferenceError
 syntax keyword egType SyntaxError TypeError URIError
 
 
