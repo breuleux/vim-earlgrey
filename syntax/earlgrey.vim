@@ -109,10 +109,14 @@ syntax keyword egBoolean true false
 syntax keyword egConstant null undefined
 
 " values
-syntax keyword egBuiltin arguments Infinity JSON Math NaN Reflect
+syntax keyword egBuiltin __dirname __filename arguments console exports global
+syntax keyword egBuiltin Infinity Intl JSON Math module NaN process Reflect
 " functions
-syntax keyword egBuiltin decodeURI decodeURIComponent encodeURI encodeURIComponent escape eval
-syntax keyword egBuiltin isFinite isNaN parseFloat parseInt unescape
+syntax keyword egBuiltin clearImmediate clearInterval clearTimeout
+syntax keyword egBuiltin decodeURI decodeURIComponent
+syntax keyword egBuiltin encodeURI encodeURIComponent escape eval
+syntax keyword egBuiltin isFinite isNaN parseFloat parseInt
+syntax keyword egBuiltin setImmediate setInterval setTimeout unescape
 " base objects
 syntax keyword egType Boolean Date Function Map Number Object
 syntax keyword egType Promise Proxy RegExp Set String Symbol WeakMap WeakSet
