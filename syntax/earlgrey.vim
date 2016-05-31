@@ -114,7 +114,7 @@ syntax keyword egBuiltin arguments Infinity JSON Math NaN Reflect
 syntax keyword egBuiltin decodeURI decodeURIComponent encodeURI encodeURIComponent escape eval
 syntax keyword egBuiltin isFinite isNaN parseFloat parseInt unescape
 " base objects
-syntax keyword egType Boolean Date Function Generator GeneratorFunction Map Number Object
+syntax keyword egType Boolean Date Function Map Number Object
 syntax keyword egType Promise Proxy RegExp Set String Symbol WeakMap WeakSet
 " array objects
 syntax keyword egType Array Float32Array Float64Array Int8Array Int16Array Int32Array
