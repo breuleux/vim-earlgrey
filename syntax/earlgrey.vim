@@ -6,7 +6,7 @@ setlocal iskeyword=48-57,a-z,A-Z,_,$,-
 
 syntax sync fromstart
 
-let pairs = ['()', '[]', '{}']
+let s:pairs = ['()', '[]', '{}']
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -28,50 +28,50 @@ syntax match egCodeQuoteDelimiter /\v`/ contained
 syntax region egCodeQuote matchgroup=egCodeQuoteDelimiter start=/\v\z(`(``)?)/ skip=/\v\\./ end=/\v\z1/ contains=@egSyntax
 
 
-let number = '%(\d+[rR][a-zA-Z0-9_]+%(\.[a-zA-Z0-9_]+)?|\d[0-9_]*%(\.\d+)?)'
-execute 'syntax match egNumber /\v<' . number . '>/'
+let s:number = '%(\d+[rR][a-zA-Z0-9_]+%(\.[a-zA-Z0-9_]+)?|\d[0-9_]*%(\.\d+)?)'
+execute 'syntax match egNumber /\v<' . s:number . '>/'
 syntax match egRadixPrefix /\v<\d+[rR]/ contained containedin=egNumber
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Identifiers
 
-let identifierStart = '[a-zA-Z$_]'
-let identifierMid = '[a-zA-Z$_0-9-]'
-let identifierEnd = '[a-zA-Z$_0-9]'
+let s:identifierStart = '[a-zA-Z$_]'
+let s:identifierMid = '[a-zA-Z$_0-9-]'
+let s:identifierEnd = '[a-zA-Z$_0-9]'
 " needs to be wrapped in < > where used
-execute "let identifier = '" . identifierStart . '%(-?' . identifierEnd . ")*'"
+execute "let s:identifier = '" . s:identifierStart . '%(-?' . s:identifierEnd . ")*'"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Operators
 
 " An operator can be any of these characters:
-let opCharacter = '[!#%&*+./:<=>?@\\^|~-]'
-let nonOpCharacter = '[^!#%&*+./:<=>?@\\^|~-]'
+let s:opCharacter = '[!#%&*+./:<=>?@\\^|~-]'
+let s:nonOpCharacter = '[^!#%&*+./:<=>?@\\^|~-]'
 
 " or any of these words:
-let opWord = '%(as|and|each|in|is|mod|not|of|or|when|where|with)'
-let opWordBinary = '%(as|and|each|in|is|mod|of|or|when|where|with)'
+let s:opWord = '%(as|and|each|in|is|mod|not|of|or|when|where|with)'
+let s:opWordBinary = '%(as|and|each|in|is|mod|of|or|when|where|with)'
 
 " although these are "low priority" for standalone control forms:
-let opLowPriority = '%(\=\>|\@?-\>|[=%,;]|each\*?|where|with)'
+let s:opLowPriority = '%(\=\>|\@?-\>|[=%,;]|each\*?|where|with)'
 
-let operatorBadMinus = '%(' . identifierEnd . '@<=-' . identifierEnd . ')'
-let operator = operatorBadMinus . '@!%(' . opCharacter . '+|<' . opWord . '>' . opCharacter . '*)'
-let operatorBinary = operatorBadMinus . '@!%(' . opCharacter . '+|<' . opWordBinary . '>' . opCharacter . '*)'
+let s:operatorBadMinus = '%(' . s:identifierEnd . '@<=-' . s:identifierEnd . ')'
+let s:operator = s:operatorBadMinus . '@!%(' . s:opCharacter . '+|<' . s:opWord . '>' . s:opCharacter . '*)'
+let s:operatorBinary = s:operatorBadMinus . '@!%(' . s:opCharacter . '+|<' . s:opWordBinary . '>' . s:opCharacter . '*)'
 
-execute 'syntax match egOperator /\v' . operator . '/'
+execute 'syntax match egOperator /\v' . s:operator . '/'
 
 " We don't (necessarily) want to highlight a standalone colon as an operator
-execute 'syntax match egControlColon /\v' . operator . '@<!:' . opCharacter . '@!/ contained containedin=egOperator'
+execute 'syntax match egControlColon /\v' . s:operator . '@<!:' . s:opCharacter . '@!/ contained containedin=egOperator'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Groups (delimited)
 
 syntax match egGroupDelimiter /\v[(){}[\]]/
-for pair in pairs
+for pair in s:pairs
   execute 'syntax region egGroup matchgroup=egGroupDelimiter '
     \ . 'start=/\v\' . pair[0] . '/ end=/\v\' . pair[1] . '/ contains=@egSyntax'
 endfor
@@ -81,23 +81,23 @@ endfor
 " Key-token, key-colon, key-indent forms
 
 " needs to be wrapped in < > where used
-execute "let symbol = '" . operator . '@!' . identifier . "'"
+execute "let s:symbol = '" . s:operator . '@!' . s:identifier . "'"
 
 " key token
-let token = '%(' . operator . opCharacter . '@!\S|' . operatorBinary . '@!' . identifier . '|[0-9''"`.({\[])'
-execute 'syntax match egStatement /\v<' . symbol . '>\ze%(\s+' . token . ')@=/'
+let s:token = '%(' . s:operator . s:opCharacter . '@!\S|' . s:operatorBinary . '@!' . s:identifier . '|[0-9''"`.({\[])'
+execute 'syntax match egStatement /\v<' . s:symbol . '>\ze%(\s+' . s:token . ')@=/'
 
 " key:, preceded by a low-priority operator
-execute 'syntax match egStatement /\v%(%(^|' . nonOpCharacter . ')' . opLowPriority . '\s*)@<=<' . symbol . '>\ze:@=/'
+execute 'syntax match egStatement /\v%(%(^|' . s:nonOpCharacter . ')' . s:opLowPriority . '\s*)@<=<' . s:symbol . '>\ze:@=/'
 
 " key:, preceded by an assignment operator
-execute 'syntax match egStatement /\v%(\=\s*)@<=<' . symbol . '>\ze:@=/'
+execute 'syntax match egStatement /\v%(\=\s*)@<=<' . s:symbol . '>\ze:@=/'
 
 " key:, not preceded by an operator
-execute 'syntax match egStatement /\v%(%(^|;)\s*)@<=<' . symbol . '>\ze:@=/'
+execute 'syntax match egStatement /\v%(%(^|;)\s*)@<=<' . s:symbol . '>\ze:@=/'
 
 " key(newline)(indent)(something)
-execute 'syntax match egStatement /\v%(^(\s*))@<=<' . symbol . '>\ze%(\s*%(\;\;.*$)?\n\1\s+)@=/'
+execute 'syntax match egStatement /\v%(^(\s*))@<=<' . s:symbol . '>\ze%(\s*%(\;\;.*$)?\n\1\s+)@=/'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -145,9 +145,9 @@ syntax keyword egKeyword if pass
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Functions
 
-for pair in pairs
+for pair in s:pairs
   execute 'syntax match egFunction '
-    \ . '/\v%(%(^|;)%(\s*%(async|gen|macro|method))?\s*)@<=<' . identifier . '>'
+    \ . '/\v%(%(^|;)%(\s*%(async|gen|macro|method))?\s*)@<=<' . s:identifier . '>'
     \ . '\ze%(\s*'
     \ . '\' . pair[0] . '%(\' . pair[0] . '.*\' . pair[1] . '|[^' . pair[1] . '])*' . '\' . pair[1]
     \ . '\s*\=\s*$)@=/'
@@ -157,10 +157,10 @@ endfor
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Operator-Identifier combinations
 
-execute 'syntax match egDotString /\v%(^|[([{,;]|\s)@<=\.<' . identifier . '>/'
+execute 'syntax match egDotString /\v%(^|[([{,;]|\s)@<=\.<' . s:identifier . '>/'
 
 " #foo shorthand (not the same thing as a JS Symbol)
-execute 'syntax match egSymbol /\v%(^|[([{,;]|\s)@<=\#<' . identifier . '>/'
+execute 'syntax match egSymbol /\v%(^|[([{,;]|\s)@<=\#<' . s:identifier . '>/'
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
