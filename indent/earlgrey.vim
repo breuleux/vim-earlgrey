@@ -4,7 +4,7 @@ setlocal shiftwidth=3
 setlocal softtabstop=3
 
 
-function! EarlGreySyntaxName(expr)
+function! s:EarlGreySyntaxName(expr)
   if type(a:expr) == type([])
     if type(a:expr[1]) == type('') && a:expr[1] == '.'
       if type(a:expr[0]) != type('') || a:expr[0] != '.'
@@ -30,7 +30,7 @@ function! EarlGreySyntaxName(expr)
 endfunction
 
 
-function! EarlGreyLineIsComment(lnum)
+function! s:EarlGreyLineIsComment(lnum)
   let line = getline(a:lnum)
   if match(line, '\v\s*;;') != -1
     return 1
@@ -39,14 +39,14 @@ function! EarlGreyLineIsComment(lnum)
 endfunction
 
 
-function! EarlGreyLineWithoutComment(lnum)
+function! s:EarlGreyLineWithoutComment(lnum)
   let cnum = col([a:lnum, '$']) - 1
   let line = getline(a:lnum)
   while 1
     if cnum < 1
       return ''
     endif
-    if EarlGreySyntaxName([a:lnum, cnum]) != 'egComment'
+    if s:EarlGreySyntaxName([a:lnum, cnum]) != 'egComment'
       return line[:cnum - 1]
     endif
     let cnum -= 1
@@ -54,14 +54,14 @@ function! EarlGreyLineWithoutComment(lnum)
 endfunction
 
 
-function! EarlGreyFindPrevCodeLine(lnum)
+function! s:EarlGreyFindPrevCodeLine(lnum)
   let lnum = a:lnum
   while 1
     let lnum = prevnonblank(lnum - 1)
     if lnum == 0
         return 0
     endif
-    if EarlGreyLineIsComment(lnum)
+    if s:EarlGreyLineIsComment(lnum)
       continue
     endif
     return lnum
@@ -73,18 +73,18 @@ function! EarlGreyIndent(lnum)
   if a:lnum == 1
     return 0
   endif
-  let prev_lnum = EarlGreyFindPrevCodeLine(a:lnum)
+  let prev_lnum = s:EarlGreyFindPrevCodeLine(a:lnum)
   if prev_lnum == 0
     return 0
   endif
-  let syntax_name = EarlGreySyntaxName('.')
+  let syntax_name = s:EarlGreySyntaxName('.')
   let prev_indent = indent(prev_lnum)
   " If we're inside a string, keep the indent of the previous line
   if !empty(syntax_name) && syntax_name == 'egString'
     return prev_indent
   endif
-  let this_line = EarlGreyLineWithoutComment(a:lnum)
-  let prev_line = EarlGreyLineWithoutComment(prev_lnum)
+  let this_line = s:EarlGreyLineWithoutComment(a:lnum)
+  let prev_line = s:EarlGreyLineWithoutComment(prev_lnum)
   let indent_level = 0
   if match(prev_line, '\v%([[({:]|%(%(^|\s+)%([=%,;]|[-=]\>|each\*?|where|with)))\s*$') != -1
     let indent_level += 1
